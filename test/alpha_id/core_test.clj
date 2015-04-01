@@ -3,5 +3,9 @@
             [alpha-id.core :refer :all]))
 
 (deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+  (testing "ID generation"
+    (let [num 9007199254740992]
+      (is (= num (decode dict-16 (encode dict-16 num))))
+      (is (= num (decode dict-32 (encode dict-32 num))))
+      (is (= num (decode dict-64 (encode dict-64 num))))
+      (is (= num (decode dict-89 (encode dict-89 num)))))))
