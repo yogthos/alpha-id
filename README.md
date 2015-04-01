@@ -13,7 +13,7 @@ The number is coverted to an alphanumeric string and back using the `encode` the
 
 Using a larger dictionary results in a shorter ID.
 
-```
+```clojure
 (use 'alpha-id.core)
 
 (encode dict-64 9007199254740992) ;=>"fFgnDxSe8"
