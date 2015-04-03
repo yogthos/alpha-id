@@ -1,13 +1,17 @@
 (ns alpha-id.core)
 
-(def dict-16 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F])
- 
-(def dict-32 [\1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \J \K \M \N \P \Q \R \S \T \U \V \W \X \Y \Z])
- 
-(def dict-64 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z \a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z])
- 
-(def dict-89 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z \a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z \+ \" \@ \* \# \% \& \/ \| \( \) \= \? \~ \[ \] \[ \} \$ \- \_ \. \: \space \, \; \< \>])
- 
+(def ^:private dict-16 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F])
+
+(def ^:private dict-32 [\1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \J \K \M \N \P \Q \R \S \T \U \V \W \X \Y \Z])
+
+(def ^:private dict-64 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z \a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z])
+
+(def ^:private dict-89 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z \a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z \+ \" \@ \* \# \% \& \/ \| \( \) \= \? \~ \[ \] \[ \} \$ \- \_ \. \: \space \, \; \< \>])
+
+(def ^:private memoized-dict-map
+  (fn [dict]
+    (into {} (map-indexed (fn [i c] [c (BigInteger. (str i))]) dict))))
+
 (defn encode [dict value]
   (let [base (-> dict count str BigInteger.)]
     (loop [result ()
@@ -23,10 +27,6 @@
                  (.subtract remaining b)
                  (inc exponent)))))))
 
-(def ^:private memoized-dict-map
-  (fn [dict]
-    (into {} (map-indexed (fn [i c] [c (BigInteger. (str i))]) dict)))) 
- 
 (defn decode [dict value]
   (let [chars (reverse value)
         base (-> dict count str BigInteger.)
@@ -42,3 +42,26 @@
                  remaining))
         bi))))
 
+(defn encode-16 [value]
+  (encode dict-16 value))
+
+(defn decode-16 [value]
+  (decode dict-16 value))
+
+(defn encode-32 [value]
+  (encode dict-32 value))
+
+(defn decode-32 [value]
+  (decode dict-32 value))
+
+(defn encode-64 [value]
+  (encode dict-64 value))
+
+(defn decode-64 [value]
+  (decode dict-64 value))
+
+(defn encode-89 [value]
+  (encode dict-89 value))
+
+(defn decode-89 [value]
+  (decode dict-89 value))

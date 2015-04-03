@@ -4,29 +4,33 @@ A Clojure library for convering numbers into short alphanumeric IDs.
 
 ## Usage
 
-The number is coverted to an alphanumeric string and back using the `encode` the `decode` functions respectively. The functions accept the dictionary as their first parameter and the value as the second. The default dictionaries are:
+The number is coverted to an alphanumeric string and back using the `encode` the `decode` functions respectively. The functions accept the dictionary as their first parameter and the value as the second.
 
-* `dict-16`
-* `dict-32`
-* `dict-64`
-* `dict-89`
+Helper functions are provided for the following dictionary sizes:
+
+* `encode-16`/`decode-16`
+* `encode-32`/`decode-32`
+* `encode-64`/`decode-64`
+* `encode-89`/`decode-89`
 
 Using a larger dictionary results in a shorter ID being generated.
 
 ```clojure
 (use 'alpha-id.core)
 
-(encode dict-64 9007199254740992) ;=>"fFgnDxSe8"
-(decode dict-64 "fFgnDxSe8") ;=> 9007199254740992
+(def dict [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F])
+(encode dict 123456) ;=> "1E240"
+(decode dict "1E240") ;=> 123456
+
+(encode-64 9007199254740992) ;=>"fFgnDxSe8"
+(decode-64 "fFgnDxSe8") ;=> 9007199254740992
 
 ;;generate randomized tokens
 (defn generate-token []
-  (encode dict-32 (rand-int 10000000)))
-  
+  (encode-32 (rand-int 10000000)))
+
 (generate-token) ;=> "935VP"
 ```
-
-
 
 ## License
 
