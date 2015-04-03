@@ -26,12 +26,6 @@ Using a larger dictionary results in a shorter ID being generated.
 
 (encode-64 9007199254740992) ;=>"fFgnDxSe8"
 (decode-64 "fFgnDxSe8") ;=> 9007199254740992
-
-;;generate randomized tokens
-(defn generate-token []
-  (encode-32 (rand-int 10000000)))
-
-(generate-token) ;=> "935VP"
 ```
 
 ## License
