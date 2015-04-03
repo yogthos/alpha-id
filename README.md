@@ -2,6 +2,8 @@
 
 A Clojure library for convering numbers into short alphanumeric IDs.
 
+[![Clojars Project](http://clojars.org/alpha-id/latest-version.svg)](http://clojars.org/alpha-id)
+
 ## Usage
 
 The number is coverted to an alphanumeric string and back using the `encode` the `decode` functions respectively. The functions accept the dictionary as their first parameter and the value as the second.
