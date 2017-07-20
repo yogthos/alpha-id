@@ -1,4 +1,4 @@
-(defproject alpha-id "0.1"
+(defproject alpha-id "0.2"
   :description "a library for convering numbers into short alphanumeric IDs"
   :url "https://github.com/yogthos/alpha-id"
   :license {:name "Eclipse Public License"
