@@ -5,7 +5,7 @@
 (deftest a-test
   (testing "ID generation"
     (let [num 9007199254740992]
-      (is (= num (decode dict-16 (encode dict-16 num))))
-      (is (= num (decode dict-32 (encode dict-32 num))))
-      (is (= num (decode dict-64 (encode dict-64 num))))
-      (is (= num (decode dict-89 (encode dict-89 num)))))))
+      (is (= num (decode-16 (encode-16 num))))
+      (is (= num (decode-32 (encode-32 num))))
+      (is (= num (decode-64 (encode-64 num))))
+      (is (= num (decode-89 (encode-89 num)))))))

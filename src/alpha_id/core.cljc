@@ -8,20 +8,20 @@
 
 (def ^:private dict-89 [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z \a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z \+ \" \@ \* \# \% \& \/ \| \( \) \= \? \~ \[ \] \[ \} \$ \- \_ \. \: \space \, \; \< \>])
 
-#?(:clj
-   (def ^:private memoized-dict-map
-     (fn [dict]
-       (into {} (map-indexed (fn [i c] [c (BigInteger. (str i))]) dict))))
-   :cljs
-   (def ^:private memoized-dict-map
-     (fn [dict]
-       (into {} (map-indexed (fn [i c] [c (js/parseInt (str i))]) dict)))))
+(defn- ->int [v]
+  #?(:clj (-> v str BigInteger.) :cljs (-> v str js/parseInt)))
+
+(defn- memoized-dict-map [dict]
+  (into {}
+        (map-indexed
+         (fn [i c] [c (->int i)])
+         dict)))
 
 #?(:clj
    (defn encode [dict value]
-     (let [base (-> dict count str BigInteger.)]
+     (let [base (-> dict count ->int)]
        (loop [result ()
-              remaining (-> value str BigInteger.)
+              remaining (-> value ->int)
               exponent 1]
          (if (.equals remaining BigInteger/ZERO)
            (apply str result)
@@ -34,9 +34,9 @@
                     (inc exponent)))))))
    :cljs
    (defn encode [dict value]
-     (let [base (-> dict count str js/parseInt)]
+     (let [base (-> dict count ->int)]
        (loop [result ()
-              remaining (-> value str js/parseInt)
+              remaining (-> value ->int)
               exponent 1]
          (if (== remaining 0)
            (apply str result)
@@ -51,7 +51,7 @@
 #?(:clj
    (defn decode [dict value]
      (let [chars (reverse value)
-           base (-> dict count str BigInteger.)
+           base (-> dict count ->int)
            dict-map (memoized-dict-map dict)]
        (loop [bi BigInteger/ZERO
               exponent 0
@@ -59,14 +59,14 @@
          (if c
            (let [a (dict-map c)
                  b (.multiply (.pow base exponent) a)]
-             (recur (.add bi (BigInteger. (str b)))
+             (recur (.add bi (->int b))
                     (inc exponent)
                     remaining))
            bi))))
    :cljs
    (defn decode [dict value]
      (let [chars (reverse value)
-           base (-> dict count str js/parseInt)
+           base (-> dict count ->int)
            dict-map (memoized-dict-map dict)]
        (loop [bi 0
               exponent 0
@@ -74,7 +74,7 @@
          (if c
            (let [a (dict-map c)
                  b (* (js/Math.pow base exponent) a)]
-             (recur (+ bi (js/parseInt (str b)))
+             (recur (+ bi (->int b))
                     (inc exponent)
                     remaining))
            bi)))))
